@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="wutongxue132">
+
+
+
+
+
+<title>C++版测评程序 | wutongxue132&#39;s blog</title>
+
+
+
+    <link rel="icon" href="/bitbug_favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">wutongxue132&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">帖子</a>
+                
+                    <a class="menu-item" href="/category">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">wutongxue132&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">帖子</a>
+                
+                    <a class="menu-item" href="/category">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">全部展开</a>
+        <a onclick="go_top()">回到顶部</a>
+        <a onclick="go_bottom()">回到底部</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? '全部展开' : '全部折叠';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">C++版测评程序</h1>
+            
+                <div class="post-meta">
+                    
+                        作者: <a itemprop="author" rel="author" href="/">wutongxue132</a>
+                    
+
+                    
+                        <span class="post-time">
+                        时间: <a href="#">2022/10/30&nbsp;&nbsp;8:58:50</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    分类:
+                            
+                                <a href="/categories/C/">C++</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>做完一道题目后，当你有一堆的测试数据，却没有用来测评的OJ，就只能一个数据一个数据的测试时，<del>你的心态一定是崩的</del>，所以需要我们自己来编写一个测评程序，批量进行测评，有助于加快测评速度。</p>
+<h2 id="代码（judge-cpp）"><a href="#代码（judge-cpp）" class="headerlink" title="代码（judge.cpp）"></a>代码（<code>judge.cpp</code>）</h2><p>其实代码<del>很简单，很通俗易懂，萌新应该都看得懂</del></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;ctime&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;windows.h&gt;</span>  <span class="comment">//这里写了一堆头文件，虽然除了一个以外都可以使用万能头文件，但是拒绝万能头文件从我做起</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">cw</span><span class="params">(<span class="type">int</span> a)</span></span>&#123;   <span class="comment">//一个拆位函数</span></span><br><span class="line">	<span class="type">int</span> ans=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(a&gt;<span class="number">0</span>)&#123;</span><br><span class="line">		ans++;</span><br><span class="line">		a/=<span class="number">10</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	string name,in=<span class="string">&quot;.in&quot;</span>,outans,out=<span class="string">&quot;.out&quot;</span>,exe=<span class="string">&quot;.exe&quot;</span>,exefile=<span class="string">&quot;.exe&quot;</span>,infile=<span class="string">&quot;.in&quot;</span>,outfile=<span class="string">&quot;.out&quot;</span>,ansfile=<span class="string">&quot;.csv&quot;</span>;  <span class="comment">//现将需要用到的文件后缀名写好，方便后期使用</span></span><br><span class="line">	<span class="type">int</span> g,gn,n,fen,ff=<span class="number">0</span>,flag1=<span class="number">0</span>,flag2=<span class="number">0</span>;</span><br><span class="line">	<span class="type">double</span> TT=<span class="number">0.0</span>;  <span class="comment">//这里的TT记录每个测试点中所用的最大时长，用双精度浮点数提高精度</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;请输入题目名：&quot;</span>);</span><br><span class="line">	cin&gt;&gt;name;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;请输入测试数据中输出文件的后缀名（ans / out）：&quot;</span>);  <span class="comment">//有些题目的测试数据中的输出文件的后缀名是&#x27;.out&#x27;但有些是&#x27;.ans&#x27;</span></span><br><span class="line">	cin&gt;&gt;outans;</span><br><span class="line">	outans.<span class="built_in">insert</span>(<span class="number">0</span>,<span class="string">&quot;.&quot;</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;请输入测试数据末尾数字格式：1.题目名后直接加数字没有0补位  2.题目名后加数字有0补位  （输入编号1/2即可）： &quot;</span>);  <span class="comment">//有些测试数据是题目名直接加数字，比如&#x27;name1.in&#x27;，而有些测试数据是题目名后加数字且有0补位，比如&#x27;name001.in&#x27;</span></span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;g);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;请输入测试数据个数：&quot;</span>);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;n);</span><br><span class="line">	<span class="type">int</span> wn=<span class="built_in">cw</span>(n)</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;请&quot;</span>);</span><br><span class="line">	<span class="keyword">while</span>(g==<span class="number">2</span>)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;输入补位后数字总位数：&quot;</span>);</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;gn);</span><br><span class="line">		<span class="keyword">if</span>(wn&gt;=gn)</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;位数过少，至少%d位\n请重新&quot;</span>,wn); </span><br><span class="line">	&#125;</span><br><span class="line">	exefile.<span class="built_in">insert</span>(<span class="number">0</span>,name);</span><br><span class="line">	infile.<span class="built_in">insert</span>(<span class="number">0</span>,name);</span><br><span class="line">	ansfile.<span class="built_in">insert</span>(<span class="number">0</span>,name);</span><br><span class="line">	outfile.<span class="built_in">insert</span>(<span class="number">0</span>,name);</span><br><span class="line">	fen=<span class="number">100</span>/n;   <span class="comment">//此处记录一个测试数据多少分</span></span><br><span class="line">	FILE* lans=<span class="built_in">fopen</span>(ansfile.<span class="built_in">c_str</span>(),<span class="string">&quot;w&quot;</span>);  <span class="comment">//这里程序还会把测评结果保存到csv表格中</span></span><br><span class="line">	<span class="built_in">fprintf</span>(lans,<span class="string">&quot;编号,结果,用时(s),得分\n&quot;</span>);</span><br><span class="line">	string cmd2=<span class="string">&quot;del &quot;</span>,cmd4=<span class="string">&quot;del &quot;</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		string cmd1=<span class="string">&quot;copy &quot;</span>,cmd3=<span class="string">&quot;fc &quot;</span>;</span><br><span class="line">		cmd1+=name;</span><br><span class="line">		cmd3+=outfile;</span><br><span class="line">		cmd3+=<span class="string">&quot; &quot;</span>;</span><br><span class="line">		cmd3+=name;</span><br><span class="line">		<span class="keyword">switch</span>(g)&#123;      <span class="comment">//这个switch中是分别加上in和out/ans文件中的数字</span></span><br><span class="line">			<span class="keyword">case</span> <span class="number">1</span>:&#123;</span><br><span class="line">				<span class="keyword">if</span>(i&lt;<span class="number">10</span>)&#123;</span><br><span class="line">					cmd1+=<span class="built_in">char</span>(i+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">					cmd3+=<span class="built_in">char</span>(i+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">else</span> <span class="keyword">if</span>(i&lt;<span class="number">100</span>)&#123;</span><br><span class="line">					cmd1+=<span class="built_in">char</span>(i/<span class="number">10</span>+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">					cmd1+=<span class="built_in">char</span>(i%<span class="number">10</span>+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">					cmd3+=<span class="built_in">char</span>(i/<span class="number">10</span>+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">					cmd3+=<span class="built_in">char</span>(i%<span class="number">10</span>+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">else</span> <span class="keyword">if</span>(i&lt;<span class="number">1000</span>)&#123;</span><br><span class="line">					cmd1+=<span class="built_in">char</span>(i/<span class="number">100</span>+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">					cmd1+=<span class="built_in">char</span>((i/<span class="number">10</span>)%<span class="number">10</span>+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">					cmd1+=<span class="built_in">char</span>(i%<span class="number">10</span>+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">					cmd3+=<span class="built_in">char</span>(i/<span class="number">100</span>+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">					cmd3+=<span class="built_in">char</span>((i/<span class="number">10</span>)%<span class="number">10</span>+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">					cmd3+=<span class="built_in">char</span>(i%<span class="number">10</span>+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">else</span> <span class="keyword">if</span>(i&lt;<span class="number">10000</span>)&#123;</span><br><span class="line">					cmd1+=<span class="built_in">char</span>(i/<span class="number">1000</span>+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">					cmd1+=<span class="built_in">char</span>((i/<span class="number">100</span>)%<span class="number">10</span>+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">					cmd1+=<span class="built_in">char</span>((i/<span class="number">10</span>)%<span class="number">10</span>+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">					cmd1+=<span class="built_in">char</span>(i%<span class="number">10</span>+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">					cmd3+=<span class="built_in">char</span>(i/<span class="number">1000</span>+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">					cmd3+=<span class="built_in">char</span>((i/<span class="number">100</span>)%<span class="number">10</span>+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">					cmd3+=<span class="built_in">char</span>((i/<span class="number">10</span>)%<span class="number">10</span>+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">					cmd3+=<span class="built_in">char</span>(i%<span class="number">10</span>+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">case</span> <span class="number">2</span>:&#123;</span><br><span class="line">				<span class="keyword">for</span>(<span class="type">int</span> j=gn<span class="number">-1</span>;j&gt;=<span class="number">0</span>;j--)&#123;</span><br><span class="line">					<span class="type">int</span> gog=<span class="built_in">pow</span>(<span class="number">10</span>,j);</span><br><span class="line">					cmd1+=<span class="built_in">char</span>((i/gog)%<span class="number">10</span>+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">					cmd3+=<span class="built_in">char</span>((i/gog)%<span class="number">10</span>+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		cmd1+=in;</span><br><span class="line">		cmd1+=<span class="string">&quot; &quot;</span>;</span><br><span class="line">		cmd1+=infile;</span><br><span class="line">		cmd3+=outans;</span><br><span class="line">		<span class="built_in">fprintf</span>(lans,<span class="string">&quot;%d,&quot;</span>,i);</span><br><span class="line">		<span class="type">int</span> time1,time2;</span><br><span class="line">		<span class="type">double</span> T;</span><br><span class="line">		<span class="built_in">system</span>(cmd<span class="number">1.</span><span class="built_in">c_str</span>());</span><br><span class="line">		time1=<span class="built_in">clock</span>();</span><br><span class="line">		<span class="built_in">system</span>(exefile.<span class="built_in">c_str</span>());</span><br><span class="line">		time2=<span class="built_in">clock</span>();</span><br><span class="line">		T=<span class="built_in">double</span>((<span class="built_in">double</span>(time2)-<span class="built_in">double</span>(time1))/<span class="number">1000.0</span>);</span><br><span class="line">		TT=T&gt;TT?T:TT;</span><br><span class="line">		<span class="keyword">if</span>(T&gt;<span class="number">1.0</span>)   <span class="comment">//这里判断次测试点是否超时（默认时间限制1s，可自行修改）</span></span><br><span class="line">			<span class="built_in">fprintf</span>(lans,<span class="string">&quot;TLE,%.3lf,%d\n&quot;</span>,T,<span class="number">0</span>),<span class="built_in">printf</span>(<span class="string">&quot;TLE,%.3lf,%d\n&quot;</span>,T,<span class="number">0</span>),flag2=<span class="number">2</span>;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span>(!<span class="built_in">system</span>(cmd<span class="number">3.</span><span class="built_in">c_str</span>()))   <span class="comment">//如果没有时间超限则判断输出是否正确</span></span><br><span class="line">			<span class="built_in">fprintf</span>(lans,<span class="string">&quot;AC,%.3lf,%d\n&quot;</span>,T,fen),<span class="built_in">printf</span>(<span class="string">&quot;AC,%.3lf,%d\n&quot;</span>,T,fen),ff+=fen;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			<span class="built_in">fprintf</span>(lans,<span class="string">&quot;WA,%.3lf,%d\n&quot;</span>,T,<span class="number">0</span>),<span class="built_in">printf</span>(<span class="string">&quot;WA,%.3lf,%d\n&quot;</span>,T,<span class="number">0</span>),flag1=<span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	cmd2+=infile;</span><br><span class="line">	cmd4+=outfile;</span><br><span class="line">	<span class="built_in">system</span>(cmd<span class="number">2.</span><span class="built_in">c_str</span>());</span><br><span class="line">	<span class="built_in">system</span>(cmd<span class="number">4.</span><span class="built_in">c_str</span>());</span><br><span class="line">	<span class="built_in">fprintf</span>(lans,<span class="string">&quot;总结果,&quot;</span>);</span><br><span class="line">	<span class="keyword">if</span>(flag1==<span class="number">0</span>&amp;&amp;flag2==<span class="number">0</span>)   <span class="comment">//最后输出一行总结果</span></span><br><span class="line">		<span class="built_in">fprintf</span>(lans,<span class="string">&quot;AC,&quot;</span>);</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span>(flag1==<span class="number">1</span>&amp;&amp;flag2==<span class="number">0</span>)</span><br><span class="line">		<span class="built_in">fprintf</span>(lans,<span class="string">&quot;WA,&quot;</span>);</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span>(flag2==<span class="number">2</span>)</span><br><span class="line">		<span class="built_in">fprintf</span>(lans,<span class="string">&quot;TLE,&quot;</span>);</span><br><span class="line">	<span class="built_in">fprintf</span>(lans,<span class="string">&quot;%.3lf,%d&quot;</span>,TT,ff);</span><br><span class="line">    <span class="built_in">fclose</span>(lans);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注：C++暂时不支持获取运行内存，所以不能判断内存超限，而且既然可以测评说明编译不会错，所以也不能判断是否编译错误</strong></p>
+<p>怎么样，是不是非常的通俗易懂<del>（bushi）</del></p>
+<p>那我来讲一下使用说明吧！</p>
+<h2 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h2><p>把上面这串代码编译后的文件（<code>judge.exe</code>）放进在带有测试数据（<code>.in</code> <code>.out/.ans</code>）的文件夹，把你写的代码编译好的文件（<code>.exe</code>）（<strong>注意 ：你的程序需要用加上<code>freopen</code>，输入文件名为 <code>题目名+.in</code> ，输出文件名为 <code>题目名+.out</code> ，更多有关内容可自行搜索</strong>）也放在那个文件夹里面，然后运行<code>judge.exe</code>，按照提示输入即可测评。</p>
+<h2 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h2><p>如果你觉得这篇文章写的很好，记得 <strong>转发</strong></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>作者:</span>
+                        <span>wutongxue132</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>永久链接:</span>
+                        <span><a href="https://wutongxue132.pages.dev/2022/10/30/C%E7%89%88%E6%B5%8B%E8%AF%84%E7%A8%8B%E5%BA%8F/">https://wutongxue132.pages.dev/2022/10/30/C%E7%89%88%E6%B5%8B%E8%AF%84%E7%A8%8B%E5%BA%8F/</a></span>
+                    </p>
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>格言:</span>
+                         <span>If I have been able to see further, it was only because I stood on the shoulders of giants.</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/C/"># C++</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>· </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2023/03/17/C%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">C++ 动态规划</a>
+            
+            
+            <a class="next" rel="next" href="/2022/09/12/%E6%B4%9B%E8%B0%B7P8506-%E6%A0%87%E9%A2%98%E8%AE%A1%E6%95%B0-%E9%A2%98%E8%A7%A3/">洛谷P8506 标题计数 题解</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© wutongxue132 | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
