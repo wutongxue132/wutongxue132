@@ -1371,3 +1371,9 @@ header label {
 .post-content pre .javascript .function {
   color: #8959a8;
 }
+#vcomments {
+  margin: 20px 0;
+}
+#vcomments .vwrap {
+  border: 1px solid #eee;
+}

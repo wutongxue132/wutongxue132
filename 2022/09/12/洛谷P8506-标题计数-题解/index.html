@@ -341,6 +341,22 @@
 
     </article>
 </div>
+
+<!-- Valine 评论 -->
+<div id="vcomments"></div>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: '#vcomments',
+    appId: '0i53XD3UuW5C0DZytKa56Wgp-gzGzoHsz',  // 从配置读取
+    appKey: '5SA9NGhuzbbc44gxE78T4r0u',
+    placeholder: '欢迎留言~',
+    avatar: 'retro',
+    meta: [&#34;nick&#34;,&#34;mail&#34;,&#34;link&#34;],
+    pageSize: 10,
+    serverURLs: ''
+  });
+</script>
             </div>
             <footer id="footer" class="footer">
     <div class="copyright">
