@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="wutongxue132">
+
+
+
+
+
+<title>腐乳制作教程 | wutongxue132&#39;s blog</title>
+
+
+
+    <link rel="icon" href="/bitbug_favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">wutongxue132&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">帖子</a>
+                
+                    <a class="menu-item" href="/category">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">wutongxue132&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">帖子</a>
+                
+                    <a class="menu-item" href="/category">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">全部展开</a>
+        <a onclick="go_top()">回到顶部</a>
+        <a onclick="go_bottom()">回到底部</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? '全部展开' : '全部折叠';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">腐乳制作教程</h1>
+            
+                <div class="post-meta">
+                    
+                        作者: <a itemprop="author" rel="author" href="/">wutongxue132</a>
+                    
+
+                    
+                        <span class="post-time">
+                        时间: <a href="#">2025/02/23&nbsp;&nbsp;12:38:23</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    分类:
+                            
+                                <a href="/categories/%E7%94%9F%E6%B4%BB/">生活</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>根据<strong>人教版生物选择性必修3第一章</strong>内容，腐乳制作教程如下：</p>
+<h2 id="一、制作原理"><a href="#一、制作原理" class="headerlink" title="一、制作原理"></a>一、制作原理</h2><ol>
+<li>毛霉等微生物分泌蛋白酶和脂肪酶，将豆腐中的蛋白质分解为小分子肽和氨基酸，脂肪分解为甘油和脂肪酸。</li>
+<li>毛霉为<strong>需氧型真菌</strong>，适宜温度$15-18^\circ C$，通过<strong>孢子繁殖</strong>。</li>
+</ol>
+<h2 id="二、材料准备"><a href="#二、材料准备" class="headerlink" title="二、材料准备"></a>二、材料准备</h2><ul>
+<li>主料：<strong>新鲜豆腐</strong>（含水量$70$%左右，切$3\times3\times1cm^2$块状）</li>
+<li>辅料：<strong>食盐</strong>、$12$%浓度<strong>料酒&#x2F;白酒</strong>、<strong>香辛料</strong>（花椒、辣椒、生姜等）</li>
+<li>工具：带孔蒸盘、玻璃罐（沸水消毒）、纱布</li>
+</ul>
+<h2 id="三、制作流程"><a href="#三、制作流程" class="headerlink" title="三、制作流程"></a>三、制作流程</h2><ol>
+<li>豆腐预处理<ul>
+<li>豆腐切块后蒸$5$分钟灭菌，自然冷却至室温。<br><img src="/images/furu/furu1.jpg" alt="furu1"><br><img src="/images/furu/furu3.jpg" alt="furu3"></li>
+</ul>
+</li>
+<li>接种毛霉<ul>
+<li>方法一：自然接种（空气中毛霉孢子）</li>
+<li>方法二：人工接种（市售腐乳曲粉$3g+100ml$凉白开调匀，豆腐块均匀沾取）<br><img src="/images/furu/furu2.jpg" alt="furu2"><br><img src="/images/furu/furu4.jpg" alt="furu4"></li>
+</ul>
+</li>
+<li>前期发酵（长菌丝）<ul>
+<li>豆腐块间隔$1cm$平铺在带孔容器，$15-18^\circ C$环境下发酵$3-7$天。</li>
+<li>观察：$48$小时开始长白色绒毛，$5-7$天菌丝布满表面。</li>
+</ul>
+</li>
+<li>加盐腌制<ul>
+<li>逐层撒盐（总盐量约豆腐质量$12$%），瓶口处盐量稍多。</li>
+<li>腌制$8$天，豆腐析出淡黄色液体，质地变硬。</li>
+</ul>
+</li>
+<li>加卤汤密封<ul>
+<li>卤汤配方：$12$%酒精+香辛料（防腐增香）</li>
+<li>豆腐块浸卤汤后装瓶，液面距瓶口$2cm$，瓶口用酒精灯火焰灭菌后密封。</li>
+</ul>
+</li>
+<li>后期发酵<ul>
+<li>$20-25^\circ C$避光环境发酵$2-3$周，待腐乳变软呈红褐色即可食用。</li>
+</ul>
+</li>
+</ol>
+<h2 id="四、关键控制点"><a href="#四、关键控制点" class="headerlink" title="四、关键控制点"></a>四、关键控制点</h2><ol>
+<li><strong>豆腐含水量</strong>：过高易碎，过低影响毛霉生长。</li>
+<li><strong>盐浓度</strong>：低于$12$%易腐败，高于$15$%抑制毛霉活性。</li>
+<li><strong>灭菌操作</strong>：蒸豆腐、沸水消毒容器、瓶口火焰灭菌。</li>
+<li><strong>温度控制</strong>：毛霉生长期$15-18^\circ C$，后期发酵$20-25^\circ C$。</li>
+</ol>
+<h2 id="五、常见问题"><a href="#五、常见问题" class="headerlink" title="五、常见问题"></a>五、常见问题</h2><ol>
+<li><strong>豆腐变硬</strong>：盐过多导致脱水，或发酵时间不足。</li>
+<li><strong>表面黑斑</strong>：杂菌污染，需提高盐浓度或重新灭菌。</li>
+<li><strong>风味不足</strong>：香辛料比例不当或酒精浓度不达标。</li>
+</ol>
+<h2 id="六、成品标准"><a href="#六、成品标准" class="headerlink" title="六、成品标准"></a>六、成品标准</h2><p>色泽均匀红褐，咸淡适口，质地细腻无硬芯，具特有醇香。制作成功的腐乳可在冰箱冷藏保存$3-6$个月。（制作过程需注意环境卫生，避免杂菌污染影响品质）</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>作者:</span>
+                        <span>wutongxue132</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>永久链接:</span>
+                        <span><a href="https://wutongxue132.pages.dev/2025/02/23/%E8%85%90%E4%B9%B3%E5%88%B6%E4%BD%9C%E6%95%99%E7%A8%8B/">https://wutongxue132.pages.dev/2025/02/23/%E8%85%90%E4%B9%B3%E5%88%B6%E4%BD%9C%E6%95%99%E7%A8%8B/</a></span>
+                    </p>
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>格言:</span>
+                         <span>If I have been able to see further, it was only because I stood on the shoulders of giants.</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E6%95%99%E7%A8%8B/"># 教程</a>
+                    
+                        <a href="/tags/%E7%94%9F%E6%B4%BB/"># 生活</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>· </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2025/02/23/%E8%B5%84%E6%BA%90/">资源</a>
+            
+        </section>
+        
+        <div style="clear:both;padding-top:15px;">
+            
+        </div>
+
+
+    </article>
+</div>
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© wutongxue132 | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+
+
+    </div>
+</body>
+
+</html>

@@ -157,32 +157,6 @@
 </footer>
 
 
-    <script src="//cdn.jsdelivr.net/npm/valine" async ></script>
-<script type="text/javascript">
-var GUEST = ['nick', 'mail', 'link'],
-    meta = 'nick,mail,link';
-meta = meta.split(',').filter(function(item) {
-  return GUEST.indexOf(item) > -1;
-});
-var loadValine = function(){
-  if('Valine' in window) {
-    new Valine({
-      el: '#vcomments',
-      appId: '0i53XD3UuW5C0DZytKa56Wgp-gzGzoHsz',
-      appKey: '5SA9NGhuzbbc44gxE78T4r0u',
-      placeholder: 'Just Go Go.',
-      avatar: 'mp',
-      meta: meta,
-      pageSize: '' || 10,
-      serverURLs: '' || ''
-    });
-  }else {
-    setTimeout(loadValine)
-  }
-}
-loadValine()
-</script>
-
 
     </div>
 </body>

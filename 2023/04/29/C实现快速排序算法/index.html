@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="wutongxue132">
+
+
+
+
+
+<title>C++实现快速排序算法 | wutongxue132&#39;s blog</title>
+
+
+
+    <link rel="icon" href="/bitbug_favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">wutongxue132&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">帖子</a>
+                
+                    <a class="menu-item" href="/category">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">wutongxue132&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">帖子</a>
+                
+                    <a class="menu-item" href="/category">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">全部展开</a>
+        <a onclick="go_top()">回到顶部</a>
+        <a onclick="go_bottom()">回到底部</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? '全部展开' : '全部折叠';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">C++实现快速排序算法</h1>
+            
+                <div class="post-meta">
+                    
+                        作者: <a itemprop="author" rel="author" href="/">wutongxue132</a>
+                    
+
+                    
+                        <span class="post-time">
+                        时间: <a href="#">2023/04/29&nbsp;&nbsp;10:48:53</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    分类:
+                            
+                                <a href="/categories/C/">C++</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>快速排序是一种高效的排序算法，采用分治策略，平均时间复杂度为O(n*logn)。本文将介绍如何使用C++实现快速排序算法。</p>
+<h2 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h2><p>快速排序包括以下步骤：</p>
+<ol>
+<li>选择基准值（pivot）</li>
+<li>将数据分为两部分：小于等于基准值的部分和大于基准值的部分</li>
+<li>对这两个部分分别递归地执行快速排序</li>
+</ol>
+<h2 id="C-代码实现"><a href="#C-代码实现" class="headerlink" title="C++代码实现"></a>C++代码实现</h2><p>下面是一个简单的C++实现：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">partition</span><span class="params">(vector&lt;<span class="type">int</span>&gt; &amp;arr, <span class="type">int</span> low, <span class="type">int</span> high)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> pivot = arr[high];</span><br><span class="line">    <span class="type">int</span> i = low - <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> j = low; j &lt;= high - <span class="number">1</span>; j++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr[j] &lt;= pivot) &#123;</span><br><span class="line">            i++;</span><br><span class="line">            <span class="built_in">swap</span>(arr[i], arr[j]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">swap</span>(arr[i + <span class="number">1</span>], arr[high]);</span><br><span class="line">    <span class="keyword">return</span> i + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">quickSort</span><span class="params">(vector&lt;<span class="type">int</span>&gt; &amp;arr, <span class="type">int</span> low, <span class="type">int</span> high)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (low &lt; high) &#123;</span><br><span class="line">        <span class="type">int</span> pivotIndex = <span class="built_in">partition</span>(arr, low, high);</span><br><span class="line">        <span class="built_in">quickSort</span>(arr, low, pivotIndex - <span class="number">1</span>);</span><br><span class="line">        <span class="built_in">quickSort</span>(arr, pivotIndex + <span class="number">1</span>, high);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    vector&lt;<span class="type">int</span>&gt; arr = &#123;<span class="number">10</span>, <span class="number">80</span>, <span class="number">30</span>, <span class="number">90</span>, <span class="number">40</span>, <span class="number">50</span>, <span class="number">70</span>&#125;;</span><br><span class="line">    <span class="type">int</span> n = arr.<span class="built_in">size</span>();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">quickSort</span>(arr, <span class="number">0</span>, n - <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        cout &lt;&lt; arr[i] &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>我们在这篇文章中，介绍了快速排序算法的原理，并给出了C++的实现。作为一种高效排序算法，快速排序在许多场景下都非常实用。希望您能从这篇文章中受益。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>作者:</span>
+                        <span>wutongxue132</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>永久链接:</span>
+                        <span><a href="https://wutongxue132.pages.dev/2023/04/29/C%E5%AE%9E%E7%8E%B0%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">https://wutongxue132.pages.dev/2023/04/29/C%E5%AE%9E%E7%8E%B0%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/</a></span>
+                    </p>
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>格言:</span>
+                         <span>If I have been able to see further, it was only because I stood on the shoulders of giants.</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/C/"># C++</a>
+                    
+                        <a href="/tags/%E7%AE%97%E6%B3%95/"># 算法</a>
+                    
+                        <a href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/"># 排序算法</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>· </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2025/02/09/Hexo-Github-%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E4%B8%93%E5%B1%9E%E5%8D%9A%E5%AE%A2/">Hexo + Github 搭建自己的专属博客</a>
+            
+            
+            <a class="next" rel="next" href="/2023/03/17/C%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">C++ 动态规划</a>
+            
+        </section>
+        
+        <div style="clear:both;padding-top:15px;">
+            
+        </div>
+
+
+    </article>
+</div>
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© wutongxue132 | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+
+
+    </div>
+</body>
+
+</html>
