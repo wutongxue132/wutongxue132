@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="wutongxue132">
+
+
+
+
+
+<title>使用MkDocs搭建静态网站并部署到GitHub Pages超详细教程 | wutongxue132&#39;s blog</title>
+
+
+
+    <link rel="icon" href="/blog.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">wutongxue132&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">帖子</a>
+                
+                    <a class="menu-item" href="/category">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">wutongxue132&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">帖子</a>
+                
+                    <a class="menu-item" href="/category">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">全部展开</a>
+        <a onclick="go_top()">回到顶部</a>
+        <a onclick="go_bottom()">回到底部</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? '全部展开' : '全部折叠';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">使用MkDocs搭建静态网站并部署到GitHub Pages超详细教程</h1>
+            
+                <div class="post-meta">
+                    
+                        作者: <a itemprop="author" rel="author" href="/">wutongxue132</a>
+                    
+
+                    
+                        <span class="post-time">
+                        时间: <a href="#">2025/08/23&nbsp;&nbsp;22:37:23</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    分类:
+                            
+                                <a href="/categories/%E6%95%99%E7%A8%8B/">教程</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="什么是MkDocs"><a href="#什么是MkDocs" class="headerlink" title="什么是MkDocs"></a>什么是MkDocs</h2><p>MkDocs是一个用Python编写的静态网站生成器，特别适合创建项目文档或个人博客。它使用Markdown来编写内容，然后生成美观的HTML页面。相比其他静态网站生成器，MkDocs的优点在于：</p>
+<ul>
+<li><strong>简单易用</strong>：安装和配置非常 straightforward</li>
+<li><strong>主题丰富</strong>：默认提供多个美观的主题，还可以自定义</li>
+<li><strong>实时预览</strong>：内置开发服务器，修改内容后立即可以看到效果</li>
+<li><strong>搜索功能</strong>：自动为文档添加全文搜索能力</li>
+<li><strong>响应式设计</strong>：生成的网站在各种设备上都能良好显示</li>
+</ul>
+<p>如果你想快速搭建一个文档网站或个人博客，MkDocs绝对是一个值得考虑的选择。</p>
+<h2 id="安装MkDocs"><a href="#安装MkDocs" class="headerlink" title="安装MkDocs"></a>安装MkDocs</h2><h3 id="步骤1：安装Python"><a href="#步骤1：安装Python" class="headerlink" title="步骤1：安装Python"></a>步骤1：安装Python</h3><p>MkDocs是基于Python的，所以首先需要安装Python。你可以从<a target="_blank" rel="noopener" href="https://www.python.org/">Python官网</a>下载最新版本的Python安装包。</p>
+<p>安装完成后，可以在命令行中输入以下命令验证是否安装成功：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python --version</span><br><span class="line"><span class="comment"># 或者 python3 --version</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="步骤2：安装MkDocs"><a href="#步骤2：安装MkDocs" class="headerlink" title="步骤2：安装MkDocs"></a>步骤2：安装MkDocs</h3><p>使用pip（Python的包管理工具）安装MkDocs：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install mkdocs</span><br><span class="line"><span class="comment"># 或者 pip3 install mkdocs</span></span><br></pre></td></tr></table></figure>
+
+<p>安装完成后，输入以下命令验证：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdocs --version</span><br></pre></td></tr></table></figure>
+
+<h2 id="创建并配置MkDocs项目"><a href="#创建并配置MkDocs项目" class="headerlink" title="创建并配置MkDocs项目"></a>创建并配置MkDocs项目</h2><h3 id="步骤1：创建新项目"><a href="#步骤1：创建新项目" class="headerlink" title="步骤1：创建新项目"></a>步骤1：创建新项目</h3><p>选择一个合适的目录，打开命令行，输入以下命令创建一个新的MkDocs项目：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdocs new my-docs</span><br></pre></td></tr></table></figure>
+
+<p>这个命令会创建一个名为<code>my-docs</code>的文件夹，里面包含MkDocs项目的基本结构：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">my-docs/</span><br><span class="line">├── docs/</span><br><span class="line">│   └── index.md</span><br><span class="line">└── mkdocs.yml</span><br></pre></td></tr></table></figure>
+
+<h3 id="步骤2：配置项目"><a href="#步骤2：配置项目" class="headerlink" title="步骤2：配置项目"></a>步骤2：配置项目</h3><p>进入项目目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> my-docs</span><br></pre></td></tr></table></figure>
+
+<p>打开<code>mkdocs.yml</code>文件，这是MkDocs的配置文件。我们可以在这里设置网站标题、主题、导航等。</p>
+<p>以下是一个基本的配置示例：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 网站标题</span></span><br><span class="line"><span class="attr">site_name:</span> <span class="string">我的文档网站</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 网站主题</span></span><br><span class="line"><span class="attr">theme:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">material</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 网站导航</span></span><br><span class="line"><span class="attr">nav:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">首页:</span> <span class="string">index.md</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">关于:</span> <span class="string">about.md</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">教程:</span> </span><br><span class="line">    <span class="bullet">-</span> <span class="string">教程1:</span> <span class="string">tutorials/tutorial1.md</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">教程2:</span> <span class="string">tutorials/tutorial2.md</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 网站描述</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">这是一个使用MkDocs创建的文档网站</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 作者信息</span></span><br><span class="line"><span class="attr">author:</span> <span class="string">wutongxue132</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 版权信息</span></span><br><span class="line"><span class="attr">copyright:</span> <span class="string">©</span> <span class="number">2025 </span><span class="string">wutongxue132</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="步骤3：添加内容"><a href="#步骤3：添加内容" class="headerlink" title="步骤3：添加内容"></a>步骤3：添加内容</h3><p>在<code>docs</code>目录下，你可以创建Markdown文件来添加网站内容。例如，创建一个<code>about.md</code>文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> docs</span><br><span class="line"> <span class="built_in">touch</span> about.md</span><br></pre></td></tr></table></figure>
+
+<p>在<code>about.md</code>中添加内容：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># 关于本站</span></span><br><span class="line"></span><br><span class="line">这是一个使用MkDocs创建的静态网站，用于展示我的项目文档和学习笔记。</span><br></pre></td></tr></table></figure>
+
+<h3 id="步骤4：预览网站"><a href="#步骤4：预览网站" class="headerlink" title="步骤4：预览网站"></a>步骤4：预览网站</h3><p>使用以下命令启动MkDocs的开发服务器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdocs serve</span><br></pre></td></tr></table></figure>
+
+<p>然后在浏览器中访问<code>http://127.0.0.1:8000/</code>，就可以看到你的网站了。开发服务器会实时监测文件变化，当你修改内容后，页面会自动刷新。</p>
+<h2 id="自定义网站主题"><a href="#自定义网站主题" class="headerlink" title="自定义网站主题"></a>自定义网站主题</h2><p>MkDocs默认提供了几个主题，其中<code>material</code>主题是最受欢迎的一个。如果没有在配置文件中指定主题，MkDocs会使用默认的<code>mkdocs</code>主题。</p>
+<p>要使用<code>material</code>主题，需要先安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install mkdocs-material</span><br></pre></td></tr></table></figure>
+
+<p>然后在<code>mkdocs.yml</code>中配置：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">theme:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">material</span></span><br><span class="line">  <span class="attr">palette:</span></span><br><span class="line">    <span class="attr">primary:</span> <span class="string">blue</span></span><br><span class="line">    <span class="attr">accent:</span> <span class="string">light</span> <span class="string">blue</span></span><br><span class="line">  <span class="attr">font:</span></span><br><span class="line">    <span class="attr">text:</span> <span class="string">Roboto</span></span><br><span class="line">    <span class="attr">code:</span> <span class="string">Roboto</span> <span class="string">Mono</span></span><br></pre></td></tr></table></figure>
+
+<p><code>material</code>主题还有很多可定制的选项，比如添加logo、修改颜色、启用暗黑模式等。你可以参考<a target="_blank" rel="noopener" href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs文档</a>了解更多细节。</p>
+<h2 id="部署到GitHub-Pages"><a href="#部署到GitHub-Pages" class="headerlink" title="部署到GitHub Pages"></a>部署到GitHub Pages</h2><h3 id="步骤1：创建GitHub仓库"><a href="#步骤1：创建GitHub仓库" class="headerlink" title="步骤1：创建GitHub仓库"></a>步骤1：创建GitHub仓库</h3><p>首先，在GitHub上创建一个新的仓库。仓库名称可以是<code>username.github.io</code>（其中<code>username</code>是你的GitHub用户名），这样你的网站会被部署到<code>https://username.github.io/</code>。</p>
+<h3 id="步骤2：配置GitHub-Pages"><a href="#步骤2：配置GitHub-Pages" class="headerlink" title="步骤2：配置GitHub Pages"></a>步骤2：配置GitHub Pages</h3><ol>
+<li>打开你的GitHub仓库，点击<code>Settings</code>选项卡。</li>
+<li>在左侧导航栏中选择<code>Pages</code>。</li>
+<li>在<code>Source</code>部分，选择<code>main</code>分支（或其他你想部署的分支）和<code>/root</code>目录。</li>
+<li>点击<code>Save</code>按钮。</li>
+</ol>
+<h3 id="步骤3：生成并部署静态文件"><a href="#步骤3：生成并部署静态文件" class="headerlink" title="步骤3：生成并部署静态文件"></a>步骤3：生成并部署静态文件</h3><p>使用以下命令生成静态文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdocs build</span><br></pre></td></tr></table></figure>
+
+<p>这个命令会在项目目录下生成一个<code>site</code>文件夹，里面包含所有的静态文件。</p>
+<p>接下来，我们需要将这些静态文件推送到GitHub仓库。可以使用以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 初始化git仓库（如果还没有）</span></span><br><span class="line">git init</span><br><span class="line">\# 添加远程仓库</span><br><span class="line">git remote add origin https://github.com/username/username.github.io.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加所有文件</span></span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交更改</span></span><br><span class="line">git commit -m <span class="string">&quot;Initial commit&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 推送到GitHub</span></span><br><span class="line">git push -u origin main</span><br></pre></td></tr></table></figure>
+
+<h3 id="步骤4：自动部署（可选）"><a href="#步骤4：自动部署（可选）" class="headerlink" title="步骤4：自动部署（可选）"></a>步骤4：自动部署（可选）</h3><p>为了简化部署流程，我们可以使用GitHub Actions来实现自动部署。创建一个<code>.github/workflows/deploy.yml</code>文件，添加以下内容：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">Deploy</span> <span class="string">MkDocs</span> <span class="string">site</span> <span class="string">to</span> <span class="string">GitHub</span> <span class="string">Pages</span></span><br><span class="line"></span><br><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">push:</span></span><br><span class="line">    <span class="attr">branches:</span> [ <span class="string">main</span> ]</span><br><span class="line"></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">deploy:</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v2</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Set</span> <span class="string">up</span> <span class="string">Python</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/setup-python@v2</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">python-version:</span> <span class="string">&#x27;3.9&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Install</span> <span class="string">dependencies</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          python -m pip install --upgrade pip</span></span><br><span class="line"><span class="string">          pip install mkdocs mkdocs-material</span></span><br><span class="line"><span class="string"></span>      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Build</span> <span class="string">site</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">mkdocs</span> <span class="string">build</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Deploy</span> <span class="string">to</span> <span class="string">GitHub</span> <span class="string">Pages</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">peaceiris/actions-gh-pages@v3</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">github_token:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.GITHUB_TOKEN</span> <span class="string">&#125;&#125;</span></span><br><span class="line">          <span class="attr">publish_dir:</span> <span class="string">./site</span></span><br></pre></td></tr></table></figure>
+
+<p>这样，每当你向<code>main</code>分支推送代码时，GitHub Actions就会自动构建并部署你的网站。</p>
+<h2 id="常见问题与解决方法"><a href="#常见问题与解决方法" class="headerlink" title="常见问题与解决方法"></a>常见问题与解决方法</h2><h3 id="1-部署后网站显示404错误"><a href="#1-部署后网站显示404错误" class="headerlink" title="1. 部署后网站显示404错误"></a>1. 部署后网站显示404错误</h3><ul>
+<li>检查GitHub Pages的配置是否正确，确保选择了正确的分支和目录。</li>
+<li>确保<code>site</code>文件夹中的文件已经被推送到GitHub仓库。</li>
+</ul>
+<h3 id="2-主题样式不生效"><a href="#2-主题样式不生效" class="headerlink" title="2. 主题样式不生效"></a>2. 主题样式不生效</h3><ul>
+<li>确保已经安装了相应的主题包（如<code>mkdocs-material</code>）。</li>
+<li>检查<code>mkdocs.yml</code>中的主题配置是否正确。</li>
+</ul>
+<h3 id="3-本地预览正常，部署后样式错乱"><a href="#3-本地预览正常，部署后样式错乱" class="headerlink" title="3. 本地预览正常，部署后样式错乱"></a>3. 本地预览正常，部署后样式错乱</h3><ul>
+<li>可能是因为路径问题，在<code>mkdocs.yml</code>中添加<code>site_url</code>配置：</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">site_url:</span> <span class="string">https://username.github.io/</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>MkDocs是一个简单易用但功能强大的静态网站生成器，特别适合创建文档网站和个人博客。通过本文的教程，你应该已经掌握了MkDocs的基本使用方法和部署到GitHub Pages的详细步骤。</p>
+<p>如果你想进一步定制你的网站，可以参考MkDocs的官方文档和相关主题的文档。祝你创建出美观实用的静态网站！</p>
+<p>如果你有任何问题或建议，欢迎在下方留言讨论。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>作者:</span>
+                        <span>wutongxue132</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>永久链接:</span>
+                        <span><a href="https://1328888.xyz/2025/08/23/MkDocs%E6%95%99%E7%A8%8B%E4%B8%8EGitHub-Pages%E9%83%A8%E7%BD%B2/">https://1328888.xyz/2025/08/23/MkDocs%E6%95%99%E7%A8%8B%E4%B8%8EGitHub-Pages%E9%83%A8%E7%BD%B2/</a></span>
+                    </p>
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>格言:</span>
+                         <span>If I have been able to see further, it was only because I stood on the shoulders of giants.</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/GitHub/"># GitHub</a>
+                    
+                        <a href="/tags/MkDocs/"># MkDocs</a>
+                    
+                        <a href="/tags/%E9%9D%99%E6%80%81%E7%BD%91%E7%AB%99/"># 静态网站</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>· </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2025/08/23/%E6%88%91%E5%88%9B%E5%BB%BA%E4%BA%86%E4%B8%80%E4%B8%AA%E5%BC%80%E6%BA%90%E7%9A%84%E7%8B%BC%E4%BA%BA%E6%9D%80Wiki%E7%9F%A5%E8%AF%86%E5%BA%93/">我创建了一个开源的狼人杀Wiki知识库</a>
+            
+        </section>
+        
+        <div style="clear:both;padding-top:15px;">
+            
+                <div id="vcomments"></div>
+            
+        </div>
+
+
+    </article>
+</div>
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© wutongxue132 | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+
+    <script src="//cdn.jsdelivr.net/npm/valine" async ></script>
+<script type="text/javascript">
+var GUEST = ['nick', 'mail', 'link'],
+    meta = 'nick,mail,link';
+meta = meta.split(',').filter(function(item) {
+  return GUEST.indexOf(item) > -1;
+});
+var loadValine = function(){
+  if('Valine' in window) {
+    new Valine({
+      el: '#vcomments',
+      appId: '0i53XD3UuW5C0DZytKa56Wgp-gzGzoHsz',
+      appKey: '5SA9NGhuzbbc44gxE78T4r0u',
+      placeholder: '欢迎评论',
+      avatar: 'mp',
+      meta: meta,
+      pageSize: '10' || 10,
+      serverURLs: '' || ''
+    });
+  }else {
+    setTimeout(loadValine)
+  }
+}
+loadValine()
+</script>
+
+
+    </div>
+</body>
+
+</html>
