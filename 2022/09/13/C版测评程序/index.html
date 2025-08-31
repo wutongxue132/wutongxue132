@@ -1,0 +1,794 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=dark>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/blog.png">
+  <link rel="icon" href="/img/blog.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wutongxue132">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="介绍做完一道题目后，当你有一堆的测试数据，却没有用来测评的OJ，就只能一个数据一个数据的测试时，你的心态一定是崩的，所以需要我们自己来编写一个测评程序，批量进行测评，有助于加快测评速度。 代码（judge.cpp）其实代码很简单，很通俗易懂，萌新应该都看得懂 1234567891011121314151617181920212223242526272829303132333435363738394">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++版测评程序">
+<meta property="og:url" content="https://1328888.xyz/2022/09/13/C%E7%89%88%E6%B5%8B%E8%AF%84%E7%A8%8B%E5%BA%8F/index.html">
+<meta property="og:site_name" content="wutongxue132&#39;s blog">
+<meta property="og:description" content="介绍做完一道题目后，当你有一堆的测试数据，却没有用来测评的OJ，就只能一个数据一个数据的测试时，你的心态一定是崩的，所以需要我们自己来编写一个测评程序，批量进行测评，有助于加快测评速度。 代码（judge.cpp）其实代码很简单，很通俗易懂，萌新应该都看得懂 1234567891011121314151617181920212223242526272829303132333435363738394">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-09-13T12:11:15.000Z">
+<meta property="article:modified_time" content="2025-02-09T15:45:37.161Z">
+<meta property="article:author" content="wutongxue132">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>C++版测评程序 - wutongxue132&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"1328888.xyz","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>wutongxue132&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="C++版测评程序"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        wutongxue132
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-09-13 20:11" pubdate>
+          2022年9月13日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          11 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">C++版测评程序</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>做完一道题目后，当你有一堆的测试数据，却没有用来测评的OJ，就只能一个数据一个数据的测试时，<del>你的心态一定是崩的</del>，所以需要我们自己来编写一个测评程序，批量进行测评，有助于加快测评速度。</p>
+<h2 id="代码（judge-cpp）"><a href="#代码（judge-cpp）" class="headerlink" title="代码（judge.cpp）"></a>代码（<code>judge.cpp</code>）</h2><p>其实代码<del>很简单，很通俗易懂，萌新应该都看得懂</del></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cstdlib&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;string&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cstring&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;ctime&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cstdio&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;cmath&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;windows.h&gt;</span>  <span class="hljs-comment">//这里写了一堆头文件，虽然除了一个以外都可以使用万能头文件，但是拒绝万能头文件从我做起</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">cw</span><span class="hljs-params">(<span class="hljs-type">int</span> a)</span></span>&#123;   <span class="hljs-comment">//一个拆位函数</span><br>	<span class="hljs-type">int</span> ans=<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">while</span>(a&gt;<span class="hljs-number">0</span>)&#123;<br>		ans++;<br>		a/=<span class="hljs-number">10</span>;<br>	&#125;<br>	<span class="hljs-keyword">return</span> ans;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	string name,in=<span class="hljs-string">&quot;.in&quot;</span>,outans,out=<span class="hljs-string">&quot;.out&quot;</span>,exe=<span class="hljs-string">&quot;.exe&quot;</span>,exefile=<span class="hljs-string">&quot;.exe&quot;</span>,infile=<span class="hljs-string">&quot;.in&quot;</span>,outfile=<span class="hljs-string">&quot;.out&quot;</span>,ansfile=<span class="hljs-string">&quot;.csv&quot;</span>;  <span class="hljs-comment">//现将需要用到的文件后缀名写好，方便后期使用</span><br>	<span class="hljs-type">int</span> g,gn,n,fen,ff=<span class="hljs-number">0</span>,flag1=<span class="hljs-number">0</span>,flag2=<span class="hljs-number">0</span>;<br>	<span class="hljs-type">double</span> TT=<span class="hljs-number">0.0</span>;  <span class="hljs-comment">//这里的TT记录每个测试点中所用的最大时长，用双精度浮点数提高精度</span><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;请输入题目名：&quot;</span>);<br>	cin&gt;&gt;name;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;请输入测试数据中输出文件的后缀名（ans / out）：&quot;</span>);  <span class="hljs-comment">//有些题目的测试数据中的输出文件的后缀名是&#x27;.out&#x27;但有些是&#x27;.ans&#x27;</span><br>	cin&gt;&gt;outans;<br>	outans.<span class="hljs-built_in">insert</span>(<span class="hljs-number">0</span>,<span class="hljs-string">&quot;.&quot;</span>);<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;请输入测试数据末尾数字格式：1.题目名后直接加数字没有0补位  2.题目名后加数字有0补位  （输入编号1/2即可）： &quot;</span>);  <span class="hljs-comment">//有些测试数据是题目名直接加数字，比如&#x27;name1.in&#x27;，而有些测试数据是题目名后加数字且有0补位，比如&#x27;name001.in&#x27;</span><br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;g);<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;请输入测试数据个数：&quot;</span>);<br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;n);<br>	<span class="hljs-type">int</span> wn=<span class="hljs-built_in">cw</span>(n)<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;请&quot;</span>);<br>	<span class="hljs-keyword">while</span>(g==<span class="hljs-number">2</span>)&#123;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;输入补位后数字总位数：&quot;</span>);<br>		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;gn);<br>		<span class="hljs-keyword">if</span>(wn&gt;=gn)<br>			<span class="hljs-keyword">break</span>;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;位数过少，至少%d位\n请重新&quot;</span>,wn); <br>	&#125;<br>	exefile.<span class="hljs-built_in">insert</span>(<span class="hljs-number">0</span>,name);<br>	infile.<span class="hljs-built_in">insert</span>(<span class="hljs-number">0</span>,name);<br>	ansfile.<span class="hljs-built_in">insert</span>(<span class="hljs-number">0</span>,name);<br>	outfile.<span class="hljs-built_in">insert</span>(<span class="hljs-number">0</span>,name);<br>	fen=<span class="hljs-number">100</span>/n;   <span class="hljs-comment">//此处记录一个测试数据多少分</span><br>	FILE* lans=<span class="hljs-built_in">fopen</span>(ansfile.<span class="hljs-built_in">c_str</span>(),<span class="hljs-string">&quot;w&quot;</span>);  <span class="hljs-comment">//这里程序还会把测评结果保存到csv表格中</span><br>	<span class="hljs-built_in">fprintf</span>(lans,<span class="hljs-string">&quot;编号,结果,用时(s),得分\n&quot;</span>);<br>	string cmd2=<span class="hljs-string">&quot;del &quot;</span>,cmd4=<span class="hljs-string">&quot;del &quot;</span>;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>		string cmd1=<span class="hljs-string">&quot;copy &quot;</span>,cmd3=<span class="hljs-string">&quot;fc &quot;</span>;<br>		cmd1+=name;<br>		cmd3+=outfile;<br>		cmd3+=<span class="hljs-string">&quot; &quot;</span>;<br>		cmd3+=name;<br>		<span class="hljs-keyword">switch</span>(g)&#123;      <span class="hljs-comment">//这个switch中是分别加上in和out/ans文件中的数字</span><br>			<span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:&#123;<br>				<span class="hljs-keyword">if</span>(i&lt;<span class="hljs-number">10</span>)&#123;<br>					cmd1+=<span class="hljs-built_in">char</span>(i+<span class="hljs-string">&#x27;0&#x27;</span>);<br>					cmd3+=<span class="hljs-built_in">char</span>(i+<span class="hljs-string">&#x27;0&#x27;</span>);<br>				&#125;<br>				<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(i&lt;<span class="hljs-number">100</span>)&#123;<br>					cmd1+=<span class="hljs-built_in">char</span>(i/<span class="hljs-number">10</span>+<span class="hljs-string">&#x27;0&#x27;</span>);<br>					cmd1+=<span class="hljs-built_in">char</span>(i%<span class="hljs-number">10</span>+<span class="hljs-string">&#x27;0&#x27;</span>);<br>					cmd3+=<span class="hljs-built_in">char</span>(i/<span class="hljs-number">10</span>+<span class="hljs-string">&#x27;0&#x27;</span>);<br>					cmd3+=<span class="hljs-built_in">char</span>(i%<span class="hljs-number">10</span>+<span class="hljs-string">&#x27;0&#x27;</span>);<br>				&#125;<br>				<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(i&lt;<span class="hljs-number">1000</span>)&#123;<br>					cmd1+=<span class="hljs-built_in">char</span>(i/<span class="hljs-number">100</span>+<span class="hljs-string">&#x27;0&#x27;</span>);<br>					cmd1+=<span class="hljs-built_in">char</span>((i/<span class="hljs-number">10</span>)%<span class="hljs-number">10</span>+<span class="hljs-string">&#x27;0&#x27;</span>);<br>					cmd1+=<span class="hljs-built_in">char</span>(i%<span class="hljs-number">10</span>+<span class="hljs-string">&#x27;0&#x27;</span>);<br>					cmd3+=<span class="hljs-built_in">char</span>(i/<span class="hljs-number">100</span>+<span class="hljs-string">&#x27;0&#x27;</span>);<br>					cmd3+=<span class="hljs-built_in">char</span>((i/<span class="hljs-number">10</span>)%<span class="hljs-number">10</span>+<span class="hljs-string">&#x27;0&#x27;</span>);<br>					cmd3+=<span class="hljs-built_in">char</span>(i%<span class="hljs-number">10</span>+<span class="hljs-string">&#x27;0&#x27;</span>);<br>				&#125;<br>				<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(i&lt;<span class="hljs-number">10000</span>)&#123;<br>					cmd1+=<span class="hljs-built_in">char</span>(i/<span class="hljs-number">1000</span>+<span class="hljs-string">&#x27;0&#x27;</span>);<br>					cmd1+=<span class="hljs-built_in">char</span>((i/<span class="hljs-number">100</span>)%<span class="hljs-number">10</span>+<span class="hljs-string">&#x27;0&#x27;</span>);<br>					cmd1+=<span class="hljs-built_in">char</span>((i/<span class="hljs-number">10</span>)%<span class="hljs-number">10</span>+<span class="hljs-string">&#x27;0&#x27;</span>);<br>					cmd1+=<span class="hljs-built_in">char</span>(i%<span class="hljs-number">10</span>+<span class="hljs-string">&#x27;0&#x27;</span>);<br>					cmd3+=<span class="hljs-built_in">char</span>(i/<span class="hljs-number">1000</span>+<span class="hljs-string">&#x27;0&#x27;</span>);<br>					cmd3+=<span class="hljs-built_in">char</span>((i/<span class="hljs-number">100</span>)%<span class="hljs-number">10</span>+<span class="hljs-string">&#x27;0&#x27;</span>);<br>					cmd3+=<span class="hljs-built_in">char</span>((i/<span class="hljs-number">10</span>)%<span class="hljs-number">10</span>+<span class="hljs-string">&#x27;0&#x27;</span>);<br>					cmd3+=<span class="hljs-built_in">char</span>(i%<span class="hljs-number">10</span>+<span class="hljs-string">&#x27;0&#x27;</span>);<br>				&#125;<br>				<span class="hljs-keyword">break</span>;<br>			&#125;<br>			<span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:&#123;<br>				<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=gn<span class="hljs-number">-1</span>;j&gt;=<span class="hljs-number">0</span>;j--)&#123;<br>					<span class="hljs-type">int</span> gog=<span class="hljs-built_in">pow</span>(<span class="hljs-number">10</span>,j);<br>					cmd1+=<span class="hljs-built_in">char</span>((i/gog)%<span class="hljs-number">10</span>+<span class="hljs-string">&#x27;0&#x27;</span>);<br>					cmd3+=<span class="hljs-built_in">char</span>((i/gog)%<span class="hljs-number">10</span>+<span class="hljs-string">&#x27;0&#x27;</span>);<br>				&#125;<br>				<span class="hljs-keyword">break</span>;<br>			&#125;<br>		&#125;<br>		cmd1+=in;<br>		cmd1+=<span class="hljs-string">&quot; &quot;</span>;<br>		cmd1+=infile;<br>		cmd3+=outans;<br>		<span class="hljs-built_in">fprintf</span>(lans,<span class="hljs-string">&quot;%d,&quot;</span>,i);<br>		<span class="hljs-type">int</span> time1,time2;<br>		<span class="hljs-type">double</span> T;<br>		<span class="hljs-built_in">system</span>(cmd<span class="hljs-number">1.</span><span class="hljs-built_in">c_str</span>());<br>		time1=<span class="hljs-built_in">clock</span>();<br>		<span class="hljs-built_in">system</span>(exefile.<span class="hljs-built_in">c_str</span>());<br>		time2=<span class="hljs-built_in">clock</span>();<br>		T=<span class="hljs-built_in">double</span>((<span class="hljs-built_in">double</span>(time2)-<span class="hljs-built_in">double</span>(time1))/<span class="hljs-number">1000.0</span>);<br>		TT=T&gt;TT?T:TT;<br>		<span class="hljs-keyword">if</span>(T&gt;<span class="hljs-number">1.0</span>)   <span class="hljs-comment">//这里判断次测试点是否超时（默认时间限制1s，可自行修改）</span><br>			<span class="hljs-built_in">fprintf</span>(lans,<span class="hljs-string">&quot;TLE,%.3lf,%d\n&quot;</span>,T,<span class="hljs-number">0</span>),<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;TLE,%.3lf,%d\n&quot;</span>,T,<span class="hljs-number">0</span>),flag2=<span class="hljs-number">2</span>;<br>		<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(!<span class="hljs-built_in">system</span>(cmd<span class="hljs-number">3.</span><span class="hljs-built_in">c_str</span>()))   <span class="hljs-comment">//如果没有时间超限则判断输出是否正确</span><br>			<span class="hljs-built_in">fprintf</span>(lans,<span class="hljs-string">&quot;AC,%.3lf,%d\n&quot;</span>,T,fen),<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;AC,%.3lf,%d\n&quot;</span>,T,fen),ff+=fen;<br>		<span class="hljs-keyword">else</span><br>			<span class="hljs-built_in">fprintf</span>(lans,<span class="hljs-string">&quot;WA,%.3lf,%d\n&quot;</span>,T,<span class="hljs-number">0</span>),<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;WA,%.3lf,%d\n&quot;</span>,T,<span class="hljs-number">0</span>),flag1=<span class="hljs-number">1</span>;<br>	&#125;<br>	cmd2+=infile;<br>	cmd4+=outfile;<br>	<span class="hljs-built_in">system</span>(cmd<span class="hljs-number">2.</span><span class="hljs-built_in">c_str</span>());<br>	<span class="hljs-built_in">system</span>(cmd<span class="hljs-number">4.</span><span class="hljs-built_in">c_str</span>());<br>	<span class="hljs-built_in">fprintf</span>(lans,<span class="hljs-string">&quot;总结果,&quot;</span>);<br>	<span class="hljs-keyword">if</span>(flag1==<span class="hljs-number">0</span>&amp;&amp;flag2==<span class="hljs-number">0</span>)   <span class="hljs-comment">//最后输出一行总结果</span><br>		<span class="hljs-built_in">fprintf</span>(lans,<span class="hljs-string">&quot;AC,&quot;</span>);<br>	<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(flag1==<span class="hljs-number">1</span>&amp;&amp;flag2==<span class="hljs-number">0</span>)<br>		<span class="hljs-built_in">fprintf</span>(lans,<span class="hljs-string">&quot;WA,&quot;</span>);<br>	<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(flag2==<span class="hljs-number">2</span>)<br>		<span class="hljs-built_in">fprintf</span>(lans,<span class="hljs-string">&quot;TLE,&quot;</span>);<br>	<span class="hljs-built_in">fprintf</span>(lans,<span class="hljs-string">&quot;%.3lf,%d&quot;</span>,TT,ff);<br>    <span class="hljs-built_in">fclose</span>(lans);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>注：C++暂时不支持获取运行内存，所以不能判断内存超限，而且既然可以测评说明编译不会错，所以也不能判断是否编译错误</strong></p>
+<p>怎么样，是不是非常的通俗易懂<del>（bushi）</del></p>
+<p>那我来讲一下使用说明吧！</p>
+<h2 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h2><p>把上面这串代码编译后的文件（<code>judge.exe</code>）放进在带有测试数据（<code>.in</code> <code>.out/.ans</code>）的文件夹，把你写的代码编译好的文件（<code>.exe</code>）（<strong>注意 ：你的程序需要用加上<code>freopen</code>，输入文件名为 <code>题目名+.in</code> ，输出文件名为 <code>题目名+.out</code> ，更多有关内容可自行搜索</strong>）也放在那个文件夹里面，然后运行<code>judge.exe</code>，按照提示输入即可测评。</p>
+<h2 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h2><p>如果你觉得这篇文章写的很好，记得 <strong>转发</strong></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/C/" class="category-chain-item">C++</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/C/" class="print-no-link">#C++</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>C++版测评程序</div>
+      <div>https://1328888.xyz/2022/09/13/C版测评程序/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wutongxue132</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年9月13日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/03/17/C%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" title="C++ 动态规划">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">C++ 动态规划</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/09/12/%E6%B4%9B%E8%B0%B7P8506-%E6%A0%87%E9%A2%98%E8%AE%A1%E6%95%B0-%E9%A2%98%E8%A7%A3/" title="洛谷P8506 标题计数 题解">
+                        <span class="hidden-mobile">洛谷P8506 标题计数 题解</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"0i53XD3UuW5C0DZytKa56Wgp-gzGzoHsz","appKey":"5SA9NGhuzbbc44gxE78T4r0u","path":"window.location.pathname","placeholder":null,"avatar":"","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
